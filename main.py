@@ -1,4 +1,5 @@
 import time
+from character_create import createCharacter
 
 
 def main():
@@ -8,7 +9,7 @@ def main():
     time.sleep(2)
     print("Welcome to Cave Dwellers, an adventure game made for up\nand coming adventurers like yourself!")
     print("First things first, we need to get to know you a little bit.")
-    return 0
+    createCharacter()
 
 
 
