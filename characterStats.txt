@@ -1,0 +1,5 @@
+Joseph
+berserk
+10
+20
+[<char_moves.Move object at 0x7f242ed17e20>, <char_moves.Move object at 0x7f242ed17d90>, <char_moves.Move object at 0x7f242ed17dc0>, <char_moves.Move object at 0x7f242ed17be0>]

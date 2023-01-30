@@ -9,7 +9,13 @@ def main():
     time.sleep(2)
     print("Welcome to Cave Dwellers, an adventure game made for up\nand coming adventurers like yourself!")
     print("First things first, we need to get to know you a little bit.")
-    createCharacter()
+    created = createCharacter()
+    file = open("characterStats.txt", "r+")
+    file.write(created.name + "\n")
+    file.write(created.arch + "\n")
+    file.write(str(created.hp) + "\n")
+    file.write(str(created.attack) + "\n")
+    file.write(str(created.moves) + "\n")
 
 
 
