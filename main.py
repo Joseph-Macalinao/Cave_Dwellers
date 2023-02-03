@@ -16,7 +16,8 @@ def main():
     file.write(str(created.hp) + "\n")
     file.write(str(created.attack) + "\n")
     file.write(str(created.moves) + "\n")
-
+    file.write(str(created.gold) + "\n")
+    file.write(str(created.inventory) + "\n")
 
 
 main()

@@ -1,20 +1,23 @@
 import time
-from char_moves import Move, characterMoves
+from char_moves import characterMoves
 
 
 class Character:
-    def __init__(self, name, arch, hp, attack, moves):
+    def __init__(self, name, arch, hp, attack, moves, gold=0):
         self.name = name
         self.arch = arch
         self.hp = hp
         self.attack = attack
         self.moves = moves
+        self.gold = gold
+        self.inventory = []
 
         
 
 
 def createCharacter():
     arch_choices = ["warrior", "wizard", "paladin", "berserk"]
+    character = None
     name = input("What is your name: ")
     time.sleep(.8)
     print(f"Great to meet you {name}")
