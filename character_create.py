@@ -12,8 +12,6 @@ class Character:
         self.gold = gold
         self.inventory = []
 
-        
-
 
 def createCharacter():
     arch_choices = ["warrior", "wizard", "paladin", "berserk"]
