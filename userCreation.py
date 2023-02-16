@@ -10,7 +10,9 @@ myCursor = mydb.cursor()
 
 
 def userCreation():
-
+    """ Function for creating users
+    :return: row of current user
+    """
     if mydb:
         # Checks to see if database exists
         cmd = str(input("New, Returning, or Create new user:\n"))
