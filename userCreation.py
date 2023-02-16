@@ -1,6 +1,7 @@
 import mysql.connector
 from character_create import createCharacter
 
+# Setup connection to MySQL
 mydb = mysql.connector.connect(
   host="localhost",
   user="root",
@@ -11,7 +12,7 @@ myCursor = mydb.cursor()
 
 def userCreation():
     """ Function for creating users
-    :return: row of current user
+    :return res (tuple): row of current user
     """
     if mydb:
         # Checks to see if database exists
