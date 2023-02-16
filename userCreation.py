@@ -4,7 +4,7 @@ from character_create import createCharacter
 mydb = mysql.connector.connect(
   host="localhost",
   user="root",
-  password="cat911"
+  password="password"
 )
 myCursor = mydb.cursor()
 
@@ -23,12 +23,16 @@ def userCreation():
 
     if cmd == "New":
         # Creates new database and new user
-        myCursor.execute("CREATE database CaveDweller")
+        if mysql.connector.connect(host="localhost", user="root", password="password", database="CaveDweller"):
+            print("Database already exists! Restart and choose Returning or Create")
+            return
+        else:
+            myCursor.execute("CREATE database CaveDweller")
         # Setups use of existing database
         existing_db = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="cat911",
+            password="password",
             database="CaveDweller"
         )
         new_cursor = existing_db.cursor()
@@ -45,7 +49,7 @@ def userCreation():
     existing_db = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="cat911",
+        password="password",
         database="CaveDweller"
     )
     new_cursor = existing_db.cursor()
@@ -55,7 +59,7 @@ def userCreation():
         new_cursor.execute("SELECT users.name FROM users")
         myResult = new_cursor.fetchall()
         for x in myResult:
-            print(x)
+            print(x[0])
         user_name = str(input("Input existing username:\n"))
 
     if cmd == "Create":
