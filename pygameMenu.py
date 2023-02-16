@@ -9,16 +9,16 @@ import tkinter # use to get height and width of screen to make correct window si
 
 INFO = tkinter.Tk()
 WIDTH = INFO.winfo_screenwidth() 
-HEIGHT = INFO.winfo_screenheight()
+HEIGHT = INFO.winfo_screenheight() - 60
 
 GREEN = (0, 100, 0)
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
 
-def createSurfaceWithText (text, fontSize, textColor, backgroundColor): # makes textbox
+def createSurfaceWithText (text, fontSize, textColor): # makes textbox
     font = pygame.freetype.SysFont("Arial", fontSize, bold = True)
-    surface, _ = font.render(text = text, fgcolor = textColor, bgcolor= backgroundColor)
+    surface, _ = font.render(text = text, fgcolor = textColor, bgcolor= None)
     return surface.convert_alpha()
 
 class Player: #player class to keep track of stats !!might not need when combine with other code
@@ -28,17 +28,34 @@ class Player: #player class to keep track of stats !!might not need when combine
         self.level = level
 
 
+class UIText(Sprite): # makes text that can't be interacted with
+    def __init__ (self, center, text, fontSize, textColor):
+        
+        super().__init__()
+
+        defaultImage = createSurfaceWithText(text, fontSize, textColor)
+
+        self.image = defaultImage
+        self.rect = defaultImage.get_rect(center = center)
+
+
+    def draw(self, surface):
+        surface.blit(self.image, self.rect)
+
+
+
+
 class UIElement(Sprite): # makes textbox an interactive button
 
-    def __init__ (self, center, text, fontSize, textColor, backgroundColor, action = None):
+    def __init__ (self, center, text, fontSize, textColor, action = None):
         
         super().__init__()
 
         self.mouseOver = False
 
-        defaultImage = createSurfaceWithText(text, fontSize, textColor, backgroundColor)
+        defaultImage = createSurfaceWithText(text, fontSize, textColor)
 
-        hoverImage = createSurfaceWithText(text, fontSize * 1.2, textColor, backgroundColor)
+        hoverImage = createSurfaceWithText(text, fontSize * 1.2, textColor)
 
         self.images = [defaultImage, hoverImage]
         self.rects = [defaultImage.get_rect(center = center), hoverImage.get_rect(center = center)]
@@ -77,11 +94,12 @@ class UIElement(Sprite): # makes textbox an interactive button
 class GameState(Enum): # enum of game states
     QUIT = -1
     TITLE = 0
-    NEWGAME = 1
-    NEXTLEVEL = 2
+    CREATECHARACTER = 1
+    CHOOSECLASS = 2
+    
 
 
-def gameLoop(screen, buttons): # game loop: pretty self expanatory
+def gameLoop(screen, buttons, backgroundImg): # game loop: pretty self expanatory
 
     while True:
         mouseUp = False
@@ -92,7 +110,9 @@ def gameLoop(screen, buttons): # game loop: pretty self expanatory
             if event.type == pygame.QUIT:
                 pygame.quit()
         
-        screen.fill(BLACK)
+        # screen.fill(GREEN)
+        img = pygame.transform.scale(backgroundImg, (WIDTH, HEIGHT))
+        screen.blit(img, img.get_rect())
 
         for button in buttons:
             uiAction = button.update(pygame.mouse.get_pos(), mouseUp)
@@ -107,47 +127,85 @@ def gameLoop(screen, buttons): # game loop: pretty self expanatory
 def titleScreen(screen): # title screen contents
 
     startButton = UIElement ( #start button
-        center=(500, 500),
+        center=(WIDTH / 2, HEIGHT / 2),
         fontSize=30,
-        backgroundColor=GREEN,
         textColor=WHITE,
-        text="Begin Journey",
-        action=GameState.NEWGAME
+        text="> Begin Journey",
+        action=GameState.CREATECHARACTER
     )
 
     quitButton = UIElement ( #quit button
-        center=(HEIGHT/2, WIDTH/2),
+        center=(50, HEIGHT - 50),
         fontSize=30,
-        backgroundColor=GREEN,
         textColor=WHITE,
-        text="Quit",
+        text="> Quit",
         action=GameState.QUIT
     )
 
-    buttons = RenderUpdates(startButton, quitButton)
-
-    return gameLoop(screen, buttons)
-
-
-def playLevel(screen): #in-game screen contents
-    menuButton = UIElement (
-        center=(100,550),
-        fontSize=20,
-        backgroundColor=GREEN,
+    titleText = UIText (
+        center=(WIDTH/2, HEIGHT/2 - 100),
+        fontSize=60,
         textColor=WHITE,
-        text="Menu",
+        text="Cave Dwellers"
+    )
+
+    UI = RenderUpdates(startButton, quitButton, titleText)
+
+    backgroundImg = pygame.image.load("./TitleImage.xcf")
+
+    return gameLoop(screen, UI, backgroundImg)
+
+
+def createCharacter(screen): #in-game screen contents
+    menuButton = UIElement (
+        center=(50, HEIGHT - 50),
+        fontSize=20,
+        textColor=WHITE,
+        text="> Menu",
         action=GameState.TITLE
     )
 
-    buttons = RenderUpdates(menuButton)
+    createCharText = UIText (
+        center=(WIDTH/2, 100),
+        fontSize=60,
+        textColor=WHITE,
+        text="Create Character"
+    )
 
-    return gameLoop(screen, buttons)
+    UI = RenderUpdates(menuButton, createCharText)
+
+    backgroundImg = pygame.image.load("./TitleImage.xcf")
+
+    return gameLoop(screen, UI, backgroundImg)
+
+
+def chooseClass(screen): #in-game screen contents
+    menuButton = UIElement (
+        center=(50, HEIGHT - 50),
+        fontSize=20,
+        textColor=WHITE,
+        text="> Menu",
+        action=GameState.TITLE
+    )
+
+    chooseClassText = UIText (
+        center=(WIDTH/2, 100),
+        fontSize=60,
+        textColor=WHITE,
+        text="Choose Class"
+    )
+
+    UI = RenderUpdates(menuButton, chooseClassText)
+
+    backgroundImg = pygame.image.load("./TitleImage.xcf")
+
+    return gameLoop(screen, UI, backgroundImg)
 
 
 if __name__ == "__main__":
     pygame.init() #initialize pygame
 
-    screen = pygame.display.set_mode([WIDTH, HEIGHT-60])
+    screen = pygame.display.set_mode([WIDTH, HEIGHT])
     pygame.display.set_caption("Cave Dwellers")
 
     gameState = GameState.TITLE
@@ -156,13 +214,12 @@ if __name__ == "__main__":
         if gameState == GameState.TITLE:
             gameState = titleScreen(screen)
 
-        if gameState == GameState.NEWGAME:
+        if gameState == GameState.CREATECHARACTER:
             player = Player()
-            gameState = playLevel(screen)
+            gameState = createCharacter(screen)
 
-        if gameState == GameState.NEXTLEVEL:
-            player.level += 1
-            gameState = playLevel(screen)
+        if gameState == GameState.CHOOSECLASS:
+            gameState = chooseClass(screen)
 
         if gameState == GameState.QUIT:
             pygame.quit()
