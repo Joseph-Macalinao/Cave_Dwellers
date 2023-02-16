@@ -22,11 +22,12 @@ def userCreation():
         return
 
     if cmd == "New":
-        # Creates new database and new user
+        # Check if user is actually returning
         if mysql.connector.connect(host="localhost", user="root", password="password", database="CaveDweller"):
             print("Database already exists! Restart and choose Returning or Create")
             return
         else:
+            # Creates new schema and new user
             myCursor.execute("CREATE database CaveDweller")
         # Setups use of existing database
         existing_db = mysql.connector.connect(
