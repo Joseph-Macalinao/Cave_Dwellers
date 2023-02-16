@@ -1,11 +1,11 @@
 import mysql.connector
+from character_create import createCharacter
 
 mydb = mysql.connector.connect(
   host="localhost",
-  # Username of the db
   user="root",
-  # Password of the db
   password="cat911",
+  database="CaveDweller"
 )
 
 mycursor = mydb.cursor()
@@ -17,10 +17,27 @@ def userCreation():
         if cmd != "Continue" or "New":
             cmd = input("Please reenter Continue or New")
     else:
-        cmd = input("Input new username")
         mycursor.execute("CREATE database CaveDweller")
         mycursor.execute("CREATE TABLE users (name VARCHAR(255) PRIMARY KEY, class VARCHAR(255))")
+        print("Welcome new player")
+        user_name = input("Input new username")
+        character = createCharacter()
+        sql = "INSERT INTO users (name, class) VALUES (%s, %s)"
+        val = [(user_name, character.name)]
+        mycursor.executemany(sql, val)
+        mydb.commit()
     if cmd == "Continue":
-        # list the previous users and have them select
+        mycursor.execute("SELECT users.name FROM users")
+        mydb.commit()
+        print(mycursor.rowcount, "was inserted.")
+        user_name = input("Input existing username")
     elif cmd == "New":
-        # create a new row in the table users
+        user_name = input("Input new username")
+        character = createCharacter()
+        sql = "INSERT INTO users (name, class) VALUES (%s, %s)"
+        val = [(user_name, character.name)]
+        mycursor.executemany(sql, val)
+        mydb.commit()
+
+
+userCreation()
