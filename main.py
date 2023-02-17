@@ -1,5 +1,6 @@
 import time
 from character_create import createCharacter
+from userCreation import userCreation
 
 
 def main():
@@ -9,6 +10,7 @@ def main():
     time.sleep(2)
     print("Welcome to Cave Dwellers, an adventure game made for up\nand coming adventurers like yourself!")
     print("First things first, we need to get to know you a little bit.")
+    user_create = userCreation()
     created = createCharacter()
     file = open("characterStats.txt", "r+")
     file.write(created.name + "\n")
