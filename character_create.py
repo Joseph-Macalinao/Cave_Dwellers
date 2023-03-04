@@ -15,12 +15,6 @@ class Character:
 def createCharacter():
     arch_choices = ["warrior", "wizard", "paladin", "berserk"]
     character = None
-    """
-    name = input("What is your name: ")
-    time.sleep(.8)
-    print(f"Great to meet you {name}")
-    time.sleep(.5)
-    """
     arch_decision = ""
     while arch_decision.lower() not in arch_choices:
         arch_decision = input("What type of character would you like to be:\nWarrior\nWizard\nPaladin\nBerserk\n")

@@ -23,7 +23,7 @@ def userCreation():
         print("Please setup MySQL database before running")
         return
 
-    if cmd == "New":
+    if cmd.lower() == "new":
         # Check if user is actually returning
         myCursor.execute("SHOW DATABASES")
         for x in myCursor:
@@ -42,7 +42,8 @@ def userCreation():
         new_cursor = existing_db.cursor()
         new_cursor.execute("CREATE TABLE users (name VARCHAR(25) PRIMARY KEY, class VARCHAR(255))")
         new_cursor.execute("CREATE TABLE stats (name VARCHAR(25) PRIMARY KEY, wins INT, losses INT, xp INT)")
-        new_cursor.execute("CREATE TABLE achievements (name VARCHAR(25) PRIMARY KEY, lvl1 TINYINT)")
+        new_cursor.execute("CREATE TABLE achievements (name VARCHAR(25) PRIMARY KEY, lvl1 TINYINT, lvl2 TINYINT, "
+                           "lvl3 TINYINT, lvl4 TINYINT, lvl5 TINYINT)")
         new_cursor.execute("CREATE TABLE inventory (name VARCHAR(25) PRIMARY KEY, "
                            "heal INT, weapon INT, armor INT, shield INT)")
         print("*** Welcome new player ***")
@@ -50,7 +51,9 @@ def userCreation():
         character = createCharacter()
         new_cursor.execute("INSERT INTO users (name, class) VALUES (%s, %s)", (user_name, character.arch))
         new_cursor.execute("INSERT INTO stats (name, wins, losses, xp) VALUES (%s, %s, %s, %s)", (user_name, 0, 0, 0))
-        new_cursor.execute("INSERT INTO achievements (name, lvl1) VALUES (%s, %s)", (user_name, int(True)))
+        new_cursor.execute("INSERT INTO achievements (name, lvl1, lvl2, lvl3, lvl4, lvl5) "
+                           "VALUES (%s, %s, %s, %s, %s, %s)", (user_name, int(True), int(False), int(False), int(False),
+                                                               int(False)))
         new_cursor.execute("INSERT INTO inventory (name, heal, weapon, armor, shield) VALUES (%s, %s, %s, %s, %s)",
                            (user_name, 0, 0, 0, 0))
         existing_db.commit()
@@ -64,37 +67,38 @@ def userCreation():
     )
     new_cursor = existing_db.cursor()
 
-    if cmd == "Returning":
+    if cmd.lower() == "returning":
         # Lists the existing users
         new_cursor.execute("SELECT users.name FROM users")
-        myResult = new_cursor.fetchall()
-        for x in myResult:
+        res = new_cursor.fetchall()
+        for x in res:
             print(x[0])
         user_name = str(input("Input existing username:\n"))
 
-    if cmd == "Create":
-        """
+    if cmd.lower() == "create":
         # Creates a new user
-        user_name = input("Input new username:\n")
+        user_name = str(input("Input new username:\n"))
+        new_cursor.execute("SELECT users.name FROM users")
+        res = new_cursor.fetchall()
+        for x in res:
+            if x[0] == user_name:
+                print("Username already exists!")
+            else:
+                continue
         character = createCharacter()
         new_cursor.execute("INSERT INTO users (name, class) VALUES (%s, %s)", (user_name, character.arch))
         new_cursor.execute("INSERT INTO stats (name, wins, losses, xp) VALUES (%s, %s, %s, %s)", (user_name, 0, 0, 0))
-        new_cursor.execute("INSERT INTO achievements (name, lvl1) VALUES (%s, %s)", (user_name, int(True)))
+        new_cursor.execute("INSERT INTO achievements (name, lvl1, lvl2, lvl3, lvl4, lvl5) "
+                           "VALUES (%s, %s, %s, %s, %s, %s)", (user_name, int(True), int(False), int(False), int(False),
+                                                               int(False)))
         new_cursor.execute("INSERT INTO inventory (name, heal, weapon, armor, shield) VALUES (%s, %s, %s, %s, %s)",
                            (user_name, 0, 0, 0, 0))
-        """
-        # Creates a new user
-        user_name = str(input("Input new username:\n"))
-        character = createCharacter()
-        sql = "INSERT INTO users (name, class) VALUES (%s, %s)"
-        val = (user_name, character.arch)
-        new_cursor.execute(sql, val)
         existing_db.commit()
 
     sql = "SELECT * FROM users WHERE users.name = %s"
     new_cursor.execute(sql, (user_name,))
-    res = new_cursor.fetchall()
-    return res
+    char = new_cursor.fetchall()
+    return char
 
 
 print(userCreation())

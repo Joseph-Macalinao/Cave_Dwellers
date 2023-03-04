@@ -4,13 +4,14 @@ from userCreation import userCreation
 
 
 def main():
-    # figure out where to start 
-    # character creation?
+    # Introduction to Cave Dwellers
     print("Hello!")
     time.sleep(2)
     print("Welcome to Cave Dwellers, an adventure game made for up\nand coming adventurers like yourself!")
     print("First things first, we need to get to know you a little bit.")
-    user_create = userCreation()
+    # Creates User and Character Class
+    userCreation()
+    """
     created = createCharacter()
     file = open("characterStats.txt", "r+")
     file.write(created.name + "\n")
@@ -20,6 +21,7 @@ def main():
     file.write(str(created.moves) + "\n")
     file.write(str(created.gold) + "\n")
     file.write(str(created.inventory) + "\n")
-
+    """
+    return
 
 main()
