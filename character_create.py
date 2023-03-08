@@ -11,7 +11,10 @@ class Character:
         self.gold = gold
         self.inventory = []
 
+        self.image = None
 
+
+'''
 def createCharacter():
     arch_choices = ["warrior", "wizard", "paladin", "berserk"]
     character = None
@@ -33,3 +36,22 @@ def createCharacter():
         character = Character(arch_decision, 10, 20, moves)
     # print(character.arch, character.attack, [i.name for i in character.moves])
     return character
+'''
+
+def createCharacter(choice):
+    character = None
+    if choice == "warrior":
+        moves = characterMoves("warrior")
+        character = Character("warrior", 20, 10, moves)
+    elif choice == "wizard":
+        moves = characterMoves("wizard")
+        character = Character("wizard", 10, 20, moves)
+    elif choice == "paladin":
+        moves = characterMoves("paladin")
+        character = Character("paladin", 15, 15, moves)
+    elif choice == "berserk":
+        moves = characterMoves("berserk")
+        character = Character("berserk", 10, 20, moves)
+    # print(character.arch, character.attack, [i.name for i in character.moves])
+    return character
+
