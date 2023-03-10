@@ -6,7 +6,7 @@ from enum import Enum
 from pygame.sprite import RenderUpdates
 import tkinter # use to get height and width of screen to make correct window size
 
-# from userCreation import userCreation
+from userCreation import userCreation
 from character_create import createCharacter
 
 INFO = tkinter.Tk()
@@ -105,6 +105,9 @@ class GameState(Enum): # enum of game states
     BERSERK = 6
     SHOP = 7
     CAMP = 8
+    NEWDB = 9
+    RETURNDB = 10
+    CREATEDB = 11
     
 
 def gameLoop(screen, buttons, backgroundImg, otherImgs = None): # game loop: pretty self expanatory
@@ -187,15 +190,31 @@ def charCreate(screen): #in-game screen contents
         text="Create Character"
     )
 
-    continueButton = UIElement (
+    newButton = UIElement (
         center=(WIDTH/2, 250),
         fontSize=35,
         textColor=WHITE,
-        text="Continue",
-        action=GameState.CHOOSECLASS
+        text="New Player",
+        action=GameState.NEWDB
     )
 
-    UI = RenderUpdates(menuButton, createCharText, continueButton)
+    returningButton = UIElement (
+        center=(WIDTH/2, 350),
+        fontSize=35,
+        textColor=WHITE,
+        text="Returning",
+        action=GameState.RETURNDB
+    )
+
+    createButton = UIElement (
+        center=(WIDTH/2, 450),
+        fontSize=35,
+        textColor=WHITE,
+        text="Create",
+        action=GameState.CREATEDB
+    )
+
+    UI = RenderUpdates(menuButton, createCharText, newButton, returningButton, createButton)
 
     backgroundImg = pygame.image.load("./TitleImage.xcf")
 
@@ -377,27 +396,44 @@ if __name__ == "__main__":
         if gameState == GameState.CHOOSECLASS:
             gameState = chooseClass(screen)
 
+        if gameState == GameState.NEWDB:
+            SELECTION = "new"
+            gameState = chooseClass(screen)
+
+        if gameState == GameState.RETURNDB:
+            #gameState = chooseClass(screen)
+            # go into menu to select what returning char
+            continue
+        
+        if gameState == GameState.CREATEDB:
+            SELECTION = "create"
+            gameState = chooseClass(screen)
+
         if gameState == GameState.WARRIOR:
-            #CHARACTER = userCreation("warrior")
-            CHARACTER = createCharacter("warrior")
+            ret = userCreation("warrior", SELECTION, "My_Player")
+            CHARACTER = ret[1]
+            #CHARACTER = createCharacter("warrior")
             CHARACTER.image = WARRIOR
             gameState = inGameMenu(screen)
 
         if gameState == GameState.WIZARD:
-            #CHARACTER = userCreation("wizard")
-            CHARACTER = createCharacter("wizard")
+            ret = userCreation("wizard", SELECTION, "My_Player")
+            CHARACTER = ret[1]
+            #CHARACTER = createCharacter("wizard")
             CHARACTER.image = WIZARD
             gameState = inGameMenu(screen)
 
         if gameState == GameState.PALDIN:
-            #CHARACTER = userCreation("paladin")
-            CHARACTER = createCharacter("paladin")
+            ret = userCreation("paladin", SELECTION, "My_Player")
+            CHARACTER = ret[1]
+            #CHARACTER = createCharacter("paladin")
             CHARACTER.image = PALADIN
             gameState = inGameMenu(screen)
 
         if gameState == GameState.BERSERK:
-            #CHARACTER = userCreation("berserk")
-            CHARACTER = createCharacter("berserk")
+            ret = userCreation("berserk", SELECTION, "My_Player")
+            CHARACTER = ret[1]
+            #CHARACTER = createCharacter("berserk")
             CHARACTER.image = BERSERK
             gameState = inGameMenu(screen)
 

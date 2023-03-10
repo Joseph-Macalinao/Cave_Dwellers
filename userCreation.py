@@ -101,7 +101,7 @@ def userCreation():
 # attempt to adjust user creation to work with pygame, not jsut terminal input
 # VVVV
 
-def userCreation(charSelection, action = "create", name = "Player1"):
+def userCreation(charSelection, action, name):
     """ Function for creating users
     :return res (tuple): row of current user
     """
@@ -189,4 +189,5 @@ def userCreation(charSelection, action = "create", name = "Player1"):
     sql = "SELECT * FROM users WHERE users.name = %s"
     new_cursor.execute(sql, (user_name,))
     char = new_cursor.fetchall()
-    return char
+    #print(character)
+    return [char, character]
