@@ -189,4 +189,6 @@ def userCreation(charSelection, action = "create", name = "Player1"):
     sql = "SELECT * FROM users WHERE users.name = %s"
     new_cursor.execute(sql, (user_name,))
     char = new_cursor.fetchall()
-    return char
+    return [char, character]
+
+# print(userCreation("berserk", "new", "Player1")[1])
