@@ -40,18 +40,19 @@ def createCharacter():
 
 def createCharacter(choice):
     character = None
-    if choice == "warrior":
+    if choice.lower() == "warrior":
         moves = characterMoves("warrior")
         character = Character("warrior", 20, 10, moves)
-    elif choice == "wizard":
+    elif choice.lower() == "wizard":
         moves = characterMoves("wizard")
         character = Character("wizard", 10, 20, moves)
-    elif choice == "paladin":
+    elif choice.lower() == "paladin":
         moves = characterMoves("paladin")
         character = Character("paladin", 15, 15, moves)
-    elif choice == "berserk":
+    elif choice.lower() == "berserk":
         moves = characterMoves("berserk")
         character = Character("berserk", 10, 20, moves)
     # print(character.arch, character.attack, [i.name for i in character.moves])
     return character
 
+#print(type(createCharacter("wizard").arch))

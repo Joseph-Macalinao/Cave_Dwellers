@@ -6,7 +6,7 @@ from enum import Enum
 from pygame.sprite import RenderUpdates
 import tkinter # use to get height and width of screen to make correct window size
 
-from userCreation import userCreation
+# from userCreation import userCreation
 from character_create import createCharacter
 
 INFO = tkinter.Tk()
