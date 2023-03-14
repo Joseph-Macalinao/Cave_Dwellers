@@ -10,5 +10,3 @@
 # Cave1 (XP Earned: 50)
 # Cave2 (XP Earned: 75)
 # Cave3 (XP Earned: 100)
-
-# No damage: user completes cave without taken any damage

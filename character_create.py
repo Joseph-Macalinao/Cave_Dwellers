@@ -55,3 +55,4 @@ def createCharacter(choice):
     # print(character.arch, character.attack, [i.name for i in character.moves])
     return character
 
+#print(type(createCharacter("wizard").arch))
