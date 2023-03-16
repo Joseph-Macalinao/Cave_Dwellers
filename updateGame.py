@@ -2,7 +2,6 @@ import mysql.connector
 
 
 def updateStats(user_name, win_num, loss_num, xp_amount):
-    # Connect to DB
     mydb = mysql.connector.connect(
         host="localhost",
         user="root",
@@ -18,7 +17,6 @@ def updateStats(user_name, win_num, loss_num, xp_amount):
 
 
 def updateAchievements(user_name, l1, l2, l3, l4, l5):
-    # Connect to DB
     mydb = mysql.connector.connect(
         host="localhost",
         user="root",
@@ -34,7 +32,6 @@ def updateAchievements(user_name, l1, l2, l3, l4, l5):
 
 
 def updateInventory(user_name, heal_num, weapon_num, armor_num, shield_num, gold_num):
-    # Connect to DB
     mydb = mysql.connector.connect(
         host="localhost",
         user="root",
