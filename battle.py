@@ -4,7 +4,7 @@ from char_moves import characterMoves
 import random
 
 
-char = Character("berserk", 10, 10, characterMoves("berserk"))
+char = Character("wizard", 10, 10, characterMoves("wizard"))
 
 def battle_init():
 	enemy_dec = random.random()
@@ -33,7 +33,7 @@ def battle(character, enemy):
 	#print(type(enem_hp), type(char_hp))
 	char_moves = {}
 	fin_move = None
-	#move_dec = ""
+	move_dec = ""
 	for i in character.moves:
 		char_moves[i.name.lower()] = (i.damage, i.crit)
 	#print(char_moves.keys())
@@ -45,7 +45,7 @@ def battle(character, enemy):
 			print("-----------------------")
 			print("Moves:")
 			for i in char_moves:
-				print(i, i.damage)
+				print(i, ": Damage: ", char_moves[i][0])
 			while move_dec not in char_moves.keys():
 				move_dec = input("Move choice: ")
 				if move_dec.lower() in char_moves:
@@ -57,20 +57,45 @@ def battle(character, enemy):
 			else:
 				enem_hp -= fin_move[1]
 			#print(enemy.name, enem_hp)
+			if enem_hp <= 0:
+				break
 		elif character_choice.lower() == "run":
 			run_chance = random.random()
-			if run_chance <= .75:
+			if run_chance <= .3:
 				print("Run successful")
 				break
 			else:
 				print("Run unsuccessful")
-				continue
+				
 	
-		elif character_chose.lower() == "item":
+		'''elif character_chose.lower() == "item":
 			if len(character.inventory) > 0:
 				for i in character.inventory:
-					print(i)
-
+					print(i)'''
+		print(f"The {enemy.name} attacks!")
+		crit_chance = random.random()
+		if crit_chance <= .2:
+			print("They did critical damage!")
+			char_hp -= (2*enemy.attack)
+		else:
+			char_hp -= enemy.attack
+		if char_hp <= 0:
+			print("You now have 0 health left!")
+		else:
+			print(f"You now have {char_hp} health left!")
+		
+	if enem_hp <= 0:
+		print(f"Congrats! You beat the {enemy.name}. You get 10 gold!")
+		character.gold += 10
+		print(f"You now have {character.gold} gold")
+	if char_hp <= 0:
+		print(f"Oh no! You lost to the {enemy.name}! You lose 10 gold!")
+		if character.gold <= 10:
+			character.gold = 0
+		else:
+			character.gold -= 10
+			print(f"Oh no! You lost to the {enemy.name}! You lose 10 gold!")
+	
 
 
 #char = Character("Joseph", "berserk", 10, 10, characterMoves("berserk"))
