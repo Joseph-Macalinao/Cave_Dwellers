@@ -2,7 +2,6 @@ import mysql.connector
 
 
 def updateStats(user_name, win_num, loss_num, xp_amount):
-    # Connect to DB
     mydb = mysql.connector.connect(
         host="localhost",
         user="root",
@@ -10,13 +9,14 @@ def updateStats(user_name, win_num, loss_num, xp_amount):
         database="CaveDweller"
     )
     mycursor = mydb.cursor()
-    mycursor.execute("UPDATE stats SET wins = win_num, losses = loss_num, xp = xp_amount WHERE name = user_name")
+    sql = "UPDATE stats SET wins = %s, losses = %s, xp = %s WHERE name = %s"
+    val = (win_num, loss_num, xp_amount, user_name)
+    mycursor.execute(sql, val)
     mydb.commit()
     return
 
 
 def updateAchievements(user_name, l1, l2, l3, l4, l5):
-    # Connect to DB
     mydb = mysql.connector.connect(
         host="localhost",
         user="root",
@@ -24,14 +24,14 @@ def updateAchievements(user_name, l1, l2, l3, l4, l5):
         database="CaveDweller"
     )
     mycursor = mydb.cursor()
-    mycursor.execute("UPDATE achievements SET lvl1 = l1, lvl2 = l2, lvl3 = l3, lvl4 = l4, lvl5 = l5 "
-                     "WHERE name = user_name")
+    sql = "UPDATE achievements SET lvl1 = %s, lvl2 = %s, lvl3 = %s, lvl4 = %s, lvl5 = %s WHERE name = %s"
+    val = (l1, l2, l3, l4, l5, user_name)
+    mycursor.execute(sql, val)
     mydb.commit()
     return
 
 
-def updateInventory(user_name, heal_num, weapon_num, armor_num, shield_num):
-    # Connect to DB
+def updateInventory(user_name, heal_num, weapon_num, armor_num, shield_num, gold_num):
     mydb = mysql.connector.connect(
         host="localhost",
         user="root",
@@ -39,7 +39,8 @@ def updateInventory(user_name, heal_num, weapon_num, armor_num, shield_num):
         database="CaveDweller"
     )
     mycursor = mydb.cursor()
-    mycursor.execute("UPDATE inventory SET heal = heal_num, weapon = weapon_num, armor = armor_num, "
-                     "shield = shield_num WHERE name = user_name")
+    sql = "UPDATE inventory SET heal = %s, weapon = %s, armor = %s, shield = %s, gold = %s WHERE name = %s"
+    val = (heal_num, weapon_num, armor_num, shield_num, gold_num, user_name)
+    mycursor.execute(sql, val)
     mydb.commit()
     return

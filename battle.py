@@ -66,12 +66,6 @@ def battle(character, enemy):
 				break
 			else:
 				print("Run unsuccessful")
-				
-	
-		'''elif character_chose.lower() == "item":
-			if len(character.inventory) > 0:
-				for i in character.inventory:
-					print(i)'''
 		print(f"The {enemy.name} attacks!")
 		crit_chance = random.random()
 		if crit_chance <= .2:
