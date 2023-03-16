@@ -452,7 +452,7 @@ def achievementsMenu(screen):
 
     UI = RenderUpdates(backButton, titleText, level1Text, level2Text, level3Text, level4Text, level5Text)
 
-    backgroundImg = pygame.image.load("TitleImage.xcf")
+    backgroundImg = pygame.image.load("achiev.xcf")
 
     return gameLoop(screen, UI, backgroundImg, otherImgs=imgs)
 
@@ -508,14 +508,14 @@ def battleScreen(screen):
         text=f"You currently have {CHARACTER.hp} hp",
     )
 
-    charImg = UIImage(pygame.transform.rotozoom(ENPIC, 0, 4), (WIDTH/2, HEIGHT/2))
+    charImg = UIImage(pygame.transform.rotozoom(ENPIC, 0, 20), (WIDTH/2 - 200, 200))
 
     imgs = []
     imgs.append(charImg)
 
     UI = RenderUpdates(runButton, Atk1Button, Atk2Button, Atk3Button, Atk4Button, charInfoTxt, enemyText)
 
-    backgroundImg = pygame.image.load("./TitleImage.xcf")
+    backgroundImg = pygame.image.load("battle.xcf")
 
     return gameLoop(screen, UI, backgroundImg, otherImgs=imgs)
 
