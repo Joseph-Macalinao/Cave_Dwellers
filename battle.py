@@ -66,7 +66,7 @@ def battle(character, enemy):
 				print("Run unsuccessful")
 				continue
 	
-		elif character_chose.lower() == "item":
+		elif character_choice.lower() == "item":
 			if len(character.inventory) > 0:
 				for i in character.inventory:
 					print(i)

@@ -5,6 +5,9 @@ from pygame.rect import Rect
 from enum import Enum
 from pygame.sprite import RenderUpdates
 import tkinter # use to get height and width of screen to make correct window size
+import random
+from enemiesClass import Wolf, Orc, Goblin
+
 
 from userCreation import userCreation
 from character_create import createCharacter
@@ -108,6 +111,7 @@ class GameState(Enum): # enum of game states
     NEWDB = 9
     RETURNDB = 10
     CREATEDB = 11
+    BATTLE = 12
     
 
 def gameLoop(screen, buttons, backgroundImg, otherImgs = None): # game loop: pretty self expanatory
@@ -308,8 +312,8 @@ def inGameMenu(screen):
         center=(WIDTH/2, 200),
         fontSize=20,
         textColor=WHITE,
-        text="> Fight",
-        #action=GameState.FIGHT
+        text="> Battle",
+        action=GameState.BATTLE
     )
 
     shopButton = UIElement (
@@ -372,6 +376,51 @@ def shopMenu(screen):
     backgroundImg = pygame.image.load("shop.xcf")
 
     return gameLoop(screen, UI, backgroundImg, otherImgs=imgs)
+
+def battleScreen(screen):
+    runButton = UIElement (
+        center=(WIDTH/2, HEIGHT - 100),
+        fontSize=35,
+        textColor=WHITE,
+        text="run",
+        action = "run"
+    )
+
+    Atk1Button = UIElement (
+        center=(WIDTH/2 - 300, HEIGHT - 50),
+        fontSize=35,
+        textColor=WHITE,
+        text=f"{CHARACTER.moves[0].name}: {CHARACTER.moves[0].damage} damage",
+        action = 0
+    )
+    Atk2Button = UIElement (
+        center=(WIDTH/2 - 300, HEIGHT - 100),
+        fontSize=35,
+        textColor=WHITE,
+        text=f"{CHARACTER.moves[1].name}: {CHARACTER.moves[1].damage} damage",
+        action = 1
+    )
+    Atk3Button = UIElement (
+        center=(WIDTH/2 + 300, HEIGHT - 50),
+        fontSize=35,
+        textColor=WHITE,
+        text=f"{CHARACTER.moves[2].name}: {CHARACTER.moves[2].damage} damage",
+        action = 2
+    )
+    Atk4Button = UIElement (
+        center=(WIDTH/2 + 300, HEIGHT - 100),
+        fontSize=35,
+        textColor=WHITE,
+        text=f"{CHARACTER.moves[3].name}: {CHARACTER.moves[3].damage} damage",
+        action = 3
+    )
+
+    UI = RenderUpdates(runButton, Atk1Button, Atk2Button, Atk3Button, Atk4Button)
+
+    backgroundImg = pygame.image.load("./TitleImage.xcf")
+
+    return gameLoop(screen, UI, backgroundImg)
+
 
 if __name__ == "__main__":
     pygame.init() #initialize pygame
@@ -442,6 +491,19 @@ if __name__ == "__main__":
 
         if gameState == GameState.SHOP:
             gameState = shopMenu(screen)
+
+        if gameState == GameState.BATTLE:
+            gameState = battleScreen(screen)
+
+            enemy_dec = random.random()
+            if 0 < enemy_dec < .333:
+                enemy_dec = Wolf()
+            elif .333 < enemy_dec < .666:
+                enemy_dec = Orc()
+            elif .666 < enemy_dec:
+                enemy_dec = Goblin()
+		    
+            battle(char, enemy_dec)
 
         if gameState == GameState.QUIT:
             pygame.quit()
