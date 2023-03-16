@@ -558,6 +558,7 @@ if __name__ == "__main__":
             gameState = inGameMenu(screen)
 
         if gameState == GameState.CAMP:
+		CHARACTER.HP = CHARACTER.MAX_HP
             gameState = inGameMenu(screen)
 
         if gameState == GameState.SHOP:
