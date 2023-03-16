@@ -192,5 +192,3 @@ def userCreation(charSelection, action, name):
     print(char)
     print(character)
     return [char, character]
-
-# print(userCreation("berserk", "new", "Player1")[1])
