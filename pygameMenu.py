@@ -112,6 +112,14 @@ class GameState(Enum): # enum of game states
     RETURNDB = 10
     CREATEDB = 11
     BATTLE = 12
+    ATK1 = 14
+    ATK2 = 15
+    ATK3 = 16
+    ATK4 = 17
+    RUN = 18
+    ENEMYATK = 19
+    VICTORY = 20
+    DEAD = 21
     
 
 def gameLoop(screen, buttons, backgroundImg, otherImgs = None): # game loop: pretty self expanatory
@@ -142,7 +150,6 @@ def gameLoop(screen, buttons, backgroundImg, otherImgs = None): # game loop: pre
 
 
         pygame.display.flip()
-
 
 
 def titleScreen(screen): # title screen contents
@@ -378,12 +385,19 @@ def shopMenu(screen):
     return gameLoop(screen, UI, backgroundImg, otherImgs=imgs)
 
 def battleScreen(screen):
+
+    enemyText = UIText (
+        center=(WIDTH/2, 100),
+        fontSize=60,
+        textColor=WHITE,
+        text=f"{ENEMY.name}: {ENEMY.health} hp"
+    )
     runButton = UIElement (
         center=(WIDTH/2, HEIGHT - 100),
         fontSize=35,
         textColor=WHITE,
         text="run",
-        action = "run"
+        action = GameState.RUN
     )
 
     Atk1Button = UIElement (
@@ -391,36 +405,74 @@ def battleScreen(screen):
         fontSize=35,
         textColor=WHITE,
         text=f"{CHARACTER.moves[0].name}: {CHARACTER.moves[0].damage} damage",
-        action = 0
+        action = GameState.ATK1
     )
     Atk2Button = UIElement (
         center=(WIDTH/2 - 300, HEIGHT - 100),
         fontSize=35,
         textColor=WHITE,
         text=f"{CHARACTER.moves[1].name}: {CHARACTER.moves[1].damage} damage",
-        action = 1
+        action = GameState.ATK2
     )
     Atk3Button = UIElement (
         center=(WIDTH/2 + 300, HEIGHT - 50),
         fontSize=35,
         textColor=WHITE,
         text=f"{CHARACTER.moves[2].name}: {CHARACTER.moves[2].damage} damage",
-        action = 2
+        action = GameState.ATK3
     )
     Atk4Button = UIElement (
         center=(WIDTH/2 + 300, HEIGHT - 100),
         fontSize=35,
         textColor=WHITE,
         text=f"{CHARACTER.moves[3].name}: {CHARACTER.moves[3].damage} damage",
-        action = 3
+        action = GameState.ATK4
     )
 
-    UI = RenderUpdates(runButton, Atk1Button, Atk2Button, Atk3Button, Atk4Button)
+    charInfoTxt = UIText (
+        center=(WIDTH-250, 300),
+        fontSize=25,
+        textColor=WHITE,
+        text=f"You currently have {CHARACTER.hp} hp",
+    )
+
+    UI = RenderUpdates(runButton, Atk1Button, Atk2Button, Atk3Button, Atk4Button, charInfoTxt, enemyText)
 
     backgroundImg = pygame.image.load("./TitleImage.xcf")
 
     return gameLoop(screen, UI, backgroundImg)
 
+def victoryScreen(screen):
+
+    titleText = UIElement (
+        center=(WIDTH/2, HEIGHT/2 - 175),
+        fontSize=60,
+        textColor=BLACK,
+        text="VICTORY",
+        action=GameState.CAMP
+    )
+
+    UI = RenderUpdates(titleText)
+
+    backgroundImg = pygame.image.load("victory.xcf")
+
+    return gameLoop(screen, UI, backgroundImg)
+
+def deathScreen(screen):
+
+    titleText = UIElement (
+        center=(WIDTH/2, HEIGHT/2 - 175),
+        fontSize=60,
+        textColor=WHITE,
+        text="DEAD",
+        action=GameState.CAMP
+    )
+
+    UI = RenderUpdates(titleText)
+
+    backgroundImg = pygame.image.load("death.xcf")
+
+    return gameLoop(screen, UI, backgroundImg)
 
 if __name__ == "__main__":
     pygame.init() #initialize pygame
@@ -493,17 +545,95 @@ if __name__ == "__main__":
             gameState = shopMenu(screen)
 
         if gameState == GameState.BATTLE:
+            ENEMY = random.random()
+            if 0 < ENEMY < .333:
+                ENEMY = Wolf()
+            elif .333 < ENEMY < .666:
+                ENEMY = Orc()
+            elif .666 < ENEMY:
+                ENEMY = Goblin()
+
             gameState = battleScreen(screen)
 
-            enemy_dec = random.random()
-            if 0 < enemy_dec < .333:
-                enemy_dec = Wolf()
-            elif .333 < enemy_dec < .666:
-                enemy_dec = Orc()
-            elif .666 < enemy_dec:
-                enemy_dec = Goblin()
-		    
-            battle(char, enemy_dec)
+        if gameState == GameState.RUN:
+            run_chance = random.random()
+            if run_chance <= .75:
+                gameState = inGameMenu(screen)
+            else:
+                gameState = GameState.ENEMYATK
+    
+        if gameState == GameState.ATK1:
+            crit_chance = random.random()
+            if crit_chance <= CHARACTER.moves[0].crit:
+                ENEMY.health -= 2*CHARACTER.moves[0].damage
+            else:
+                ENEMY.health -= CHARACTER.moves[0].damage
+
+            if ENEMY.health <= 0:
+                CHARACTER.gold += 10
+                gameState = GameState.VICTORY
+            else:
+                gameState = GameState.ENEMYATK
+
+        if gameState == GameState.ATK2:
+            crit_chance = random.random()
+            if crit_chance <= CHARACTER.moves[1].crit:
+                ENEMY.health -= 2*CHARACTER.moves[1].damage
+            else:
+                ENEMY.health -= CHARACTER.moves[1].damage
+
+            if ENEMY.health <= 0:
+                CHARACTER.gold += 10
+                gameState = GameState.VICTORY
+                
+            else:
+                gameState = GameState.ENEMYATK
+
+
+        if gameState == GameState.ATK3:
+            crit_chance = random.random()
+            if crit_chance <= CHARACTER.moves[2].crit:
+                ENEMY.health -= 2*CHARACTER.moves[2].damage
+            else:
+                ENEMY.health -= CHARACTER.moves[2].damage
+
+            if ENEMY.health <= 0:
+                CHARACTER.gold += 10
+                gameState = GameState.VICTORY
+            else:
+                gameState = GameState.ENEMYATK
+
+
+        if gameState == GameState.ATK4:
+            crit_chance = random.random()
+            if crit_chance <= CHARACTER.moves[3].crit:
+                ENEMY.health -= 2*CHARACTER.moves[3].damage
+            else:
+                ENEMY.health -= CHARACTER.moves[3].damage
+
+            if ENEMY.health <= 0:
+                CHARACTER.gold += 10
+                gameState = GameState.VICTORY
+            else:
+                gameState = GameState.ENEMYATK
+
+
+        if gameState == GameState.ENEMYATK:
+            crit_chance = random.random()
+            if crit_chance <= .2:
+                CHARACTER.hp -= ENEMY.attack
+            else:
+                CHARACTER.hp -= ENEMY.attack
+            
+            if CHARACTER.hp <= 0:
+                CHARACTER.gold -= 10
+                gameState = GameState.DEAD
+
+        if gameState == GameState.VICTORY:
+            gameState = victoryScreen(screen)
+
+        if gameState == GameState.DEAD:
+            gameState = deathScreen(screen)
 
         if gameState == GameState.QUIT:
             pygame.quit()
