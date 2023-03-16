@@ -3,10 +3,10 @@ from char_moves import characterMoves
 
 
 class Character:
-    def __init__(self, arch, max_hp, attack, moves, gold=0):
+    def __init__(self, arch, hp, attack, moves, gold=0):
         self.arch = arch
-	self.max_hp
-        self.hp = max_hp
+        self.max_hp = hp
+        self.hp = hp
         self.attack = attack
         self.moves = moves
         self.gold = gold

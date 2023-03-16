@@ -508,11 +508,16 @@ def battleScreen(screen):
         text=f"You currently have {CHARACTER.hp} hp",
     )
 
+    charImg = UIImage(pygame.transform.rotozoom(ENPIC, 0, 4), (WIDTH/2, HEIGHT/2))
+
+    imgs = []
+    imgs.append(charImg)
+
     UI = RenderUpdates(runButton, Atk1Button, Atk2Button, Atk3Button, Atk4Button, charInfoTxt, enemyText)
 
     backgroundImg = pygame.image.load("./TitleImage.xcf")
 
-    return gameLoop(screen, UI, backgroundImg)
+    return gameLoop(screen, UI, backgroundImg, otherImgs=imgs)
 
 def victoryScreen(screen):
 
@@ -540,7 +545,14 @@ def deathScreen(screen):
         action=GameState.CAMP
     )
 
-    UI = RenderUpdates(titleText)
+    charInfoTxt = UIText (
+        center=(WIDTH-250, 300),
+        fontSize=25,
+        textColor=WHITE,
+        text=f"You currently have {CHARACTER.hp} hp"
+    )
+
+    UI = RenderUpdates(titleText, charInfoTxt)
 
     backgroundImg = pygame.image.load("death.xcf")
 
@@ -556,6 +568,10 @@ if __name__ == "__main__":
     WIZARD = pygame.image.load("wizard.xcf").convert_alpha()
     PALADIN = pygame.image.load("paladin.xcf").convert_alpha()
     BERSERK = pygame.image.load("berserk.xcf").convert_alpha()
+
+    GOBLIN = pygame.image.load("Goblin.xcf").convert_alpha()
+    ORC = pygame.image.load("Orc.xcf").convert_alpha()
+    WOLF = pygame.image.load("Wolf.xcf").convert_alpha()
 
     gameState = GameState.TITLE
 
@@ -611,7 +627,7 @@ if __name__ == "__main__":
             gameState = inGameMenu(screen)
 
         if gameState == GameState.CAMP:
-		CHARACTER.HP = CHARACTER.MAX_HP
+            CHARACTER.hp = CHARACTER.max_hp
             gameState = inGameMenu(screen)
 
         if gameState == GameState.SHOP:
@@ -624,10 +640,13 @@ if __name__ == "__main__":
             ENEMY = random.random()
             if 0 < ENEMY < .333:
                 ENEMY = Wolf()
+                ENPIC = WOLF
             elif .333 < ENEMY < .666:
                 ENEMY = Orc()
+                ENPIC = ORC
             elif .666 < ENEMY:
                 ENEMY = Goblin()
+                ENPIC = GOBLIN
 
             gameState = battleScreen(screen)
 
@@ -697,13 +716,16 @@ if __name__ == "__main__":
         if gameState == GameState.ENEMYATK:
             crit_chance = random.random()
             if crit_chance <= .2:
-                CHARACTER.hp -= ENEMY.attack
+                CHARACTER.hp -= ENEMY.attack * 2
             else:
                 CHARACTER.hp -= ENEMY.attack
             
             if CHARACTER.hp <= 0:
                 CHARACTER.gold -= 10
                 gameState = GameState.DEAD
+
+            else:
+                gameState = battleScreen(screen)
 
         if gameState == GameState.VICTORY:
             gameState = victoryScreen(screen)
