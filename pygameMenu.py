@@ -112,6 +112,7 @@ class GameState(Enum): # enum of game states
     RETURNDB = 10
     CREATEDB = 11
     BATTLE = 12
+    ACHIEVEMENTS = 13
     
 
 def gameLoop(screen, buttons, backgroundImg, otherImgs = None): # game loop: pretty self expanatory
@@ -324,6 +325,14 @@ def inGameMenu(screen):
         action=GameState.SHOP
     )
 
+    achievementsButton = UIElement(
+        center=(WIDTH - 90, HEIGHT - 50),
+        fontSize=20,
+        textColor=WHITE,
+        text="> Achievements",
+        action=GameState.ACHIEVEMENTS
+    )
+
     charInfoTxt = UIText (
         center=(WIDTH-250, 300),
         fontSize=25,
@@ -336,7 +345,7 @@ def inGameMenu(screen):
     imgs = []
     imgs.append(charImg)
 
-    UI = RenderUpdates(menuButton, titleText, fightButton, shopButton, charInfoTxt)
+    UI = RenderUpdates(menuButton, titleText, fightButton, shopButton, achievementsButton, charInfoTxt)
 
     backgroundImg = pygame.image.load("camp.xcf")
 
@@ -374,6 +383,68 @@ def shopMenu(screen):
     UI = RenderUpdates(backButton, titleText, charInfoTxt)
 
     backgroundImg = pygame.image.load("shop.xcf")
+
+    return gameLoop(screen, UI, backgroundImg, otherImgs=imgs)
+
+def achievementsMenu(screen):
+    backButton = UIElement (
+        center=(75, HEIGHT - 50),
+        fontSize=20,
+        textColor=WHITE,
+        text="> Back to camp",
+        action=GameState.CAMP
+    )
+
+    titleText = UIText (
+        center=(WIDTH/2, 100),
+        fontSize=60,
+        textColor=WHITE,
+        text="Achievements"
+    )
+
+    level1Text = UIText (
+        center=(WIDTH/4, 180),
+        fontSize=40,
+        textColor=WHITE,
+        text="Lvl1: Complete"
+    )
+
+    level2Text = UIText(
+        center=(WIDTH / 4, 250),
+        fontSize=40,
+        textColor=WHITE,
+        text="Lvl2: X"
+    )
+
+    level3Text = UIText(
+        center=(WIDTH * 3/4, 180),
+        fontSize=40,
+        textColor=WHITE,
+        text="Lvl3: X"
+    )
+
+    level4Text = UIText(
+        center=(WIDTH * 3/4, 250),
+        fontSize=40,
+        textColor=WHITE,
+        text="Lvl4: X"
+    )
+
+    level5Text = UIText(
+        center=(WIDTH / 2, 310),
+        fontSize=40,
+        textColor=WHITE,
+        text="Lvl5: X"
+    )
+
+    charImg = UIImage(pygame.transform.rotozoom(CHARACTER.image, 0, 4), (400, HEIGHT - 400))
+
+    imgs = []
+    imgs.append(charImg)
+
+    UI = RenderUpdates(backButton, titleText, level1Text, level2Text, level3Text, level4Text, level5Text)
+
+    backgroundImg = pygame.image.load("TitleImage.xcf")
 
     return gameLoop(screen, UI, backgroundImg, otherImgs=imgs)
 
@@ -491,6 +562,9 @@ if __name__ == "__main__":
 
         if gameState == GameState.SHOP:
             gameState = shopMenu(screen)
+
+        if gameState == GameState.ACHIEVEMENTS:
+            gameState = achievementsMenu(screen)
 
         if gameState == GameState.BATTLE:
             gameState = battleScreen(screen)
