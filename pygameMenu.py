@@ -387,6 +387,7 @@ def shopMenu(screen):
     return gameLoop(screen, UI, backgroundImg, otherImgs=imgs)
 
 def achievementsMenu(screen):
+    #
     backButton = UIElement (
         center=(75, HEIGHT - 50),
         fontSize=20,
